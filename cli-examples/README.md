@@ -7,26 +7,25 @@ Let's go through a list of common commands for Kafka administration.
 - List topic
 
 ```sh
-$ kafka-topic.sh --bootstrap-server kafka-server:9092 --list
+$ kafka-topics.sh --bootstrap-server localhost:9092 --list
 ```
 
 - Create topic
 
 ```sh
-$ kafka-topics.sh --bootstrap-server kafka-server:9092 --create --topic
-"my-topic"
+$ kafka-topics.sh --bootstrap-server localhost:9092 --create --topic "my-topic"
 ```
 
 - Describe topic details
 
 ```sh
-$ kafka-topics.sh --boostrap-server kafka-server:9092 --describe --topic my-topic
+$ kafka-topics.sh --boostrap-server localhost:9092 --describe --topic my-topic
 ```
 
 - Adding partitions
 
 ```sh
-$ kafka-topics.sh --bootstrap-server kafka-server:9092 --alter --topic my-topic
+$ kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic my-topic \
 --partitions 16
 ```
 
@@ -35,20 +34,20 @@ $ kafka-topics.sh --bootstrap-server kafka-server:9092 --alter --topic my-topic
 - List consumers
 
 ```sh
-$ kafka-consumer-groups.sh --bootstrap-server kafka-server:9092 --list
+$ kafka-consumer-groups.sh --bootstrap-server localhost:9092 --list
 ```
 
 - Describe consumer
 
 ```sh
-$ kafka-consumer-groups.sh --bootstrap-server kafka-server:9092 --describe
+$ kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe \
 --group my-consumer
 ```
 
 - Delete Group
 
 ```sh
-$ kafka-consumer-groups.sh --bootstrap-server kafka-server:9092 --delete --group
+$ kafka-consumer-groups.sh --bootstrap-server localhost:9092 --delete --group \
 my-consumer
 ```
 
@@ -57,21 +56,21 @@ my-consumer
 - Changing retention topic to 1 hour
 
 ```sh
-$ kafka-configs.sh --bootstrap-server kafka-server:9092 --alter --entity-type
+$ kafka-configs.sh --bootstrap-server localhost:9092 --alter --entity-type \
 topics --entity-name my-topic --add-config retention.ms=3600000
 ```
 
 - Describe configuration overrides
 
 ```sh
-$ kafka-configs.sh --bootstrap-server kafka-server:9092 --describe --entity-type
+$ kafka-configs.sh --bootstrap-server localhost:9092 --describe --entity-type \
 topics --entity-name my-topic
 ```
 
 - Remove configuration overrides
 
 ```sh
-$ kafka-configs.sh --bootstrap-server kafka-server:9092 --alter --entity-type
+$ kafka-configs.sh --bootstrap-server localhost:9092 --alter --entity-type \
 topics --entity-name my-topic --delete-config retention.ms
 ```
 
@@ -83,8 +82,7 @@ application. Used mainly for testing purpose.
 - Producing messages
 
 ```sh
-$ kafka-console-producer.sh --bootstrap-server kafka-server:9092 --topic
-my-topic
+$ kafka-console-producer.sh --bootstrap-server localhost:9092 --topic my-topic
 
 > Msg 1
 > Msg 2
@@ -106,7 +104,7 @@ Convenience utility to perform consumer actions using CLI.
 - Consume messages
 
 ```sh
-$ kafka-console-consumer.sh --bootstrap-server kafka-server:9092 --topic
+$ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic \
 my-topic --from-beginning
 ```
 
@@ -128,8 +126,17 @@ partitions to brokers.
 - Initiate a leader reelection for all topics in a cluster
 
 ```sh
-$ kafka-leader-election.sh --bootstrap-server kafka-server:9092 --election-type
+$ kafka-leader-election.sh --bootstrap-server localhost:9092 --election-type \
 PREFERRED --all-topic-partitions
+```
+
+## Offset Management
+
+We can manage offset using `kafka-consumer-groups.sh`.
+
+```sh
+$ kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group \
+"wiki-test-group" --topic "wiki-test" --reset-offsets --to-offset 0 --execute
 ```
 
 We can also choose certain partitions or topics to perform elections. We can
