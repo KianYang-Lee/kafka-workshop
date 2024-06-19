@@ -6,11 +6,12 @@ import (
 	"os"
 	"os/signal"
 	"sync"
+	"time"
 
 	"github.com/segmentio/kafka-go"
 )
 
-func RunGroups(n int, sleep int64) {
+func RunGroup(n int, sleep int64) {
 	log.Printf("Running consumer group with %d consumers ...\n", n)
 	var wg sync.WaitGroup
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
@@ -24,10 +25,8 @@ func RunGroups(n int, sleep int64) {
 		})
 		child, cancel := context.WithCancel(ctx)
 		defer cancel()
-		child = context.WithValue(child, "sleepDuration", sleep)
-		child = context.WithValue(child, "consumerID", i)
-		go start(child, r, &wg)
 		wg.Add(1)
+		go start(child, r, &wg, time.Duration(sleep), i)
 	}
 	<-ctx.Done()
 	wg.Wait()

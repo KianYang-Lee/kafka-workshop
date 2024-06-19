@@ -31,7 +31,7 @@ to quickly create a Cobra application.`,
 		if err != nil {
 			log.Fatalln(err)
 		}
-		consumer.RunGroups(num, sleep)
+		consumer.RunGroup(num, sleep)
 	},
 }
 
