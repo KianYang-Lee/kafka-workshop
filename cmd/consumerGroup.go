@@ -4,7 +4,6 @@ Copyright © 2024 KianYang Lee <ken.lee.kianyang@gmail.com>
 package cmd
 
 import (
-	"fmt"
 	"kafka-workshop/internal/app/consumer"
 	"log"
 
@@ -14,15 +13,13 @@ import (
 // consumerGroupCmd represents the consumerGroup command
 var consumerGroupCmd = &cobra.Command{
 	Use:   "consumerGroup",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Runs Kafka consumer group client",
+	Long: `
+Runs Kafka consumer group client that reads from "wiki-test" topic
+from Kafka broker. User can configure how many consumers to run.
+Optional argument can be set to simulate I/O processing using "sleep"
+flag.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("consumerGroup called")
 		num, err := cmd.Flags().GetInt("num")
 		if err != nil {
 			log.Fatalln(err)
