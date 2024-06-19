@@ -3,6 +3,7 @@ package producer
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"os/signal"
 	"sync"
@@ -46,7 +47,10 @@ func RunStream() {
 
 	wg.Add(1)
 	go func() {
-		client.SubscribeChanRawWithContext(ctx, stream)
+		err := client.SubscribeChanRawWithContext(ctx, stream)
+		if err != nil {
+			log.Println("unsubscribe from chan: ", err)
+		}
 		wg.Done()
 	}()
 	<-ctx.Done()
