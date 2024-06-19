@@ -24,6 +24,7 @@ func RunStream() {
 		Balancer: &kafka.LeastBytes{},
 	}
 
+	wg.Add(1)
 	go func() {
 		for msg := range stream {
 			err := w.WriteMessages(context.Background(),
@@ -40,17 +41,17 @@ func RunStream() {
 		}
 		wg.Done()
 	}()
-	wg.Add(1)
 
 	client := sse.NewClient("https://stream.wikimedia.org/v2/stream/test")
 
-	go client.SubscribeChanRawWithContext(ctx, stream)
 	wg.Add(1)
-
+	go func() {
+		client.SubscribeChanRawWithContext(ctx, stream)
+		wg.Done()
+	}()
 	<-ctx.Done()
 	client.Unsubscribe(stream)
 	close(stream)
-	wg.Done()
 	wg.Wait()
 	fmt.Println("Done running stream producer")
 }
