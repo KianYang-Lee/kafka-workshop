@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"kafka-workshop/internal/app/producer"
+	"log"
 
 	"github.com/spf13/cobra"
 )
@@ -18,10 +19,15 @@ The application, when run, will establish an event stream to
 receive stream from Wiki event. It will write every messages that it 
 receive to Kafka broker for topic "wiki-test".`,
 	Run: func(cmd *cobra.Command, args []string) {
-		producer.RunStream()
+		streamName, err := cmd.Flags().GetString("streamName")
+		if err != nil {
+			log.Fatalln(err)
+		}
+		producer.RunStream(streamName)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(streamProducerCmd)
+	streamProducerCmd.Flags().StringP("streamName", "n", "test", "Wiki event stream to read from(same name will be used as topic name)")
 }
