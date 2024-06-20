@@ -12,7 +12,7 @@ import (
 // producerCmd represents the producer command
 var producerCmd = &cobra.Command{
 	Use:   "producer",
-	Short: "Runs Kafka producer client",
+	Short: "Runs sample of Kafka producer client",
 	Long: `
 Runs Kafka producer client that writes a few sample messages to 
 "my-topic" topic. Use to demonstrate how to implement a simple Kafka

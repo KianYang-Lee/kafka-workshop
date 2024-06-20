@@ -28,7 +28,15 @@ flag.`,
 		if err != nil {
 			log.Fatalln(err)
 		}
-		consumer.Run(num, sleep)
+		topic, err := cmd.Flags().GetString("topic")
+		if err != nil {
+			log.Fatalln(err)
+		}
+		groupID, err := cmd.Flags().GetString("groupID")
+		if err != nil {
+			log.Fatalln(err)
+		}
+		consumer.Run(num, sleep, topic, groupID)
 	},
 }
 
@@ -36,4 +44,6 @@ func init() {
 	rootCmd.AddCommand(consumerCmd)
 	consumerCmd.Flags().IntP("num", "n", 1, "number of consumers")
 	consumerCmd.Flags().Int64P("sleep", "s", 0, "number of seconds to sleep (to simulate I/O load)")
+	consumerCmd.Flags().StringP("topic", "t", "my-topic", "topic to be consumed")
+	consumerCmd.Flags().StringP("groupID", "g", "", "group ID of consumer group (if not specified, operate as single consumer)")
 }
