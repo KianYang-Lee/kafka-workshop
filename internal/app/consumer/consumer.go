@@ -52,6 +52,9 @@ Loop:
 				break
 			}
 			fmt.Printf("Consumer ID %d: message at offset %d: %s = %s\n", id, m.Offset, string(m.Key), string(m.Value))
+			// TODO: Replace sleep with actual processing language,
+			// e.g. aggregation and then display to frontend or
+			// write it into DB
 			if d > 0 {
 				time.Sleep(time.Duration(d) * time.Second)
 			}
@@ -66,6 +69,7 @@ Loop:
 // newConsumer instantiates a new [kafka.Reader] that reads for partition i and
 // topic of topicName and returns the pointer.
 func newConsumer(i int, topicName string) *kafka.Reader {
+	// TODO: Experiment with different configurations
 	r := kafka.NewReader(kafka.ReaderConfig{
 		Brokers:   []string{"localhost:9092"},
 		Topic:     topicName,
@@ -79,6 +83,7 @@ func newConsumer(i int, topicName string) *kafka.Reader {
 // topic of topicName and returns the pointer. It will operate in a consumer
 // group under group groupID.
 func newConsumerGroup(topicName string, groupID string) *kafka.Reader {
+	// TODO: Experiment with different configurations
 	r := kafka.NewReader(kafka.ReaderConfig{
 		Brokers:  []string{"localhost:9092"},
 		Topic:    topicName,
